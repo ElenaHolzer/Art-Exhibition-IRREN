@@ -1,0 +1,62 @@
+assigning IP's to each RaspberryPi for network
+------------------------------------------------------------------------
+login as: pi
+pi@[IP-Adresse]
+
+pi@raspberrypi:~ $ ifconfig [IP-Adresse anzeigen lassen]
+eth0 inet Adresse: [IP-Adresse]
+eth1 für WLAN
+-------------------------------------------------------------------------
+Im Router schauen, welchen Bereich der Router abdeckt:
+Routerseite aufrufen
+"Heimnetzwerk (LAN)"
+"DHCP ein"
+"Adressen vergeben im Bereich 192.168.2.XXX"
+"bis 192.168.2.XXX"
+"Gültigkeitsdauer der Adressen: XXX"
+[0 und 255 nicht verwenden!]
+[Bereich zwischen den dort angezeigten Zahlen nicht verwenden (automatische Vergabe an neue Geräte)]
+-------------------------------------------------------------------------
+DHCP Client Demon (DHCPCD) abschalten:
+pi@raspberrypi:~ $ sudo service dhcpcd stop
+
+DHCP Client Demon (DHCPCD) Autostart bei neuem Hochfahren abschalten:
+pi@raspberrypi:~ $ sudo systemctl disable dhcpcd
+
+NICHT ABSCHALTEN JETZT!
+-------------------------------------------------------------------------
+Midnight Commander [vorher installieren]
+pi@raspberrypi:~ $ sudo mc
+
+/etc
+/network
+interfaces [ist eine Datei]
+mit F4 öffnen
+
+iface eth0 inet manual [Client Demon kümmert sich um die IP-Adresse]
+# davor setzen oder Zeile löschen:
+#iface eth0 inet manual
+
+auto eth0
+allow-hotplug eth0
+iface eth0 inet static
+   address [IP-Adresse]
+   netmask [IP-Adresse]
+   gateway [IP-Adresse]
+   dns-nameservers [IP-Adresse]
+
+Speichern mit F2
+Midnight Commander verlassen
+--------------------------------------------------------------------------
+pi@raspberrypi:~ $ sudo reboot
+[Kurz warten bis wieder hochgefahren]
+PuTTY Configuration:
+"Host Name (or IP address)"
+[vergebene IP-Adresse eingeben]
+
+"Raspberry PI load"
+"Connection"
+"Data"
+"Auto-login unsername: pi"
+"Raspberry PI save"
+Doppelklick auf "Raspberry PI"
